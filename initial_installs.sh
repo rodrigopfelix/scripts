@@ -134,12 +134,13 @@ echo "Insira a senha AD: "
 read SENHAAD
 sshpass -p $SENHAAD ssh-copy-id -oStrictHostKeyChecking=accept-new -i ~/.ssh/id_rsa.pub $USUARIOAD@10.1.110.1
 sshpass -p $SENHAAD ssh-copy-id -oStrictHostKeyChecking=accept-new -i ~/.ssh/id_rsa.pub $USUARIOAD@10.1.110.2
+sshpass -p $SENHAAD ssh-copy-id -oStrictHostKeyChecking=accept-new -i ~/.ssh/id_rsa.pub $USUARIOAD@10.1.110.8
 sshpass -p $SENHAAD ssh-copy-id -oStrictHostKeyChecking=accept-new -i ~/.ssh/id_rsa.pub $USUARIOAD@10.1.110.9
 sshpass -p $SENHAAD ssh-copy-id -oStrictHostKeyChecking=accept-new -i ~/.ssh/id_rsa.pub $USUARIOAD@10.1.110.11
 sshpass -p $SENHAAD ssh-copy-id -oStrictHostKeyChecking=accept-new -i ~/.ssh/id_rsa.pub $USUARIOAD@10.1.110.20
 sshpass -p $SENHAAD ssh-copy-id -oStrictHostKeyChecking=accept-new -i ~/.ssh/id_rsa.pub $USUARIOAD@10.1.110.21
 sshpass -p $SENHAAD ssh-copy-id -oStrictHostKeyChecking=accept-new -i ~/.ssh/id_rsa.pub $USUARIOAD@172.16.2.57
 
-printf "host 10.1.110.1 10.1.110.2 10.1.110.9 10.1.110.11 10.1.110.20 10.1.110.21 172.16.2.57\nuser $USUARIOAD" > ~/.ssh/config
+printf "host 10.1.110.1 10.1.110.2 10.1.110.8 10.1.110.9 10.1.110.11 10.1.110.20 10.1.110.21 172.16.2.57\nuser $USUARIOAD" > ~/.ssh/config
 
 

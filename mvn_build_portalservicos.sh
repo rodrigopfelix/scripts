@@ -57,10 +57,9 @@ do
 	fi
 
 	if [ "$choose" != "c" ]; then
-
 		### Executing the build
-		mvn -T 4 clean install -f "$POM"
-
+		### Using "DEV.MANUAL" to differs of jenkins builds
+		mvn -T 4 -U clean package -Dproject.build.sourceEncoding=ISO-8859-1 -DBUILD_NUMBER=DEV.MANUAL -f "$POM"
 	fi
 done
 

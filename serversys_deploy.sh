@@ -7,8 +7,8 @@ SVN_TAG_RELATIVE_URL="Relative URL"
 
 IP_DESTINO="10.1.110.20"
 PATH_DESTINO="/home/rodrigo.felix.ext/src"
-REPORT_DATA_PATH="/usr/sascar/sasgc/"
-RELATORIO_JAR="relatorio_rodrigo.jar"
+REPORT_DATA_PATH="/home/emerson.silva.ext/bin/relatorio/"
+RELATORIO_JAR="relatorio.jar"
 PATH_TMP="$PATH_DESTINO/tmp/"
 
 RED='\033[0;31m'
@@ -63,7 +63,7 @@ BUILD_JAVA()
 #####################################
 ### main
 
-if [ -z $1 ]; then THROW 'Informe os sistemas a serem compilados (OPÇÕES: includes reportincludes libs reportlibs report i18n oracle relatoriojava)'; fi
+if [ -z $1 ]; then THROW 'Informe os sistemas a serem compilados (OPÇÕES: includes reportincludes libs reportlibs report i18n oracle relatoriojava jasperadicionais)'; fi
 
 
 REPOSITORIO=`svn info | grep "^$SVN_TAG_RAIZ:" | egrep -o '[^/]+$'`
@@ -114,7 +114,8 @@ do
             ;;
         relatoriojava|relatoriojar|relatorioj|java)
             BUILD_JAVA "sasgc_embarcado/RelatoriosSasgc"    
-            scp $PWD/sasgc_embarcado/RelatoriosSasgc/target/relatorios-sasgc-2.0-SNAPSHOT.jar "$IP_DESTINO:$PATH_DESTINO/tmp/$RELATORIO_JAR"
+            # scp $PWD/sasgc_embarcado/RelatoriosSasgc/target/RelatoriosSasgc-jar-with-dependencies.jar "$IP_DESTINO:$PATH_DESTINO/tmp/$RELATORIO_JAR"
+            scp $PWD/sasgc_embarcado/RelatoriosSasgc/target/relatorios-sasgc-2.0-SNAPSHOT-jar-with-dependencies.jar "$IP_DESTINO:$PATH_DESTINO/tmp/$RELATORIO_JAR"
             if [ $? != 0 ]; then THROW "Não foi possível copiar o arquivo $2"; fi
             ssh -t $IP_DESTINO "sudo mv $PATH_DESTINO/tmp/$RELATORIO_JAR $REPORT_DATA_PATH"
             if [ $? != 0 ]; then THROW "Não foi possível copiar do servidor para o diretório do sasgc"; fi

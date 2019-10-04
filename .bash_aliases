@@ -50,7 +50,9 @@ alias cdparserdev='cdparser && desenvolvimento/'
 alias cdparserhom='cdparser && homologacao/'
 alias cdparserprod='cdparser && producao/'
 alias cdintranet='cd ~/src/intranet/trunk/'
-#alias cdjava='cd ~/src/modulo-processor/'
+alias cdjava='cd ~/src/aplicacoes_legado_java/'
+alias cdjavadev='cdjava && cd desenvolvimento/'
+alias cdjavahom='cdjava && cd homologacao/'
 alias cdportalservicos='cd ~/src/portalservicos/'
 alias cdportalservicoshom='cdportalservicos && cd homologacao/java/trunk/'
 alias cdportalservicosdev='cdportalservicos && cd desenvolvimento/PRDSEG-2961/java/trunk/' 
@@ -83,6 +85,8 @@ alias sshportalservicos='ssh -t rodrigo.felix.ext@10.1.110.11'
 alias sshportalservicossu='ssh -t rodrigo.felix.ext@10.1.110.11 "sudo su"'
 alias sshjava='ssh -t rodrigo.felix.ext@10.1.110.9'
 alias sshjavasu='ssh -t rodrigo.felix.ext@10.1.110.9 "sudo su"'
+alias sshsasintegra='ssh -t rodrigo.felix.ext@10.1.110.8'
+alias sshsasintegrasu='ssh -t rodrigo.felix.ext@10.1.110.8 "sudo su"'
 alias mountstikadinho='sshfs rodrigo.felix.ext@10.1.110.20:/home/rodrigo.felix.ext ~/src/mount'
 alias umountstikadinho='sudo umount ~/src/mount'
 
@@ -95,6 +99,8 @@ alias requestpos3883SBS='requestpos 357042063643986'
 alias requestposHXA7003='requestpos 354868062776051'
 alias requestpos0669ENG='requestpos 357302075046739'
 alias requestpos0029ENG='requestpos 355000081016033'
+alias requestpos2281SFS='requestpos 355371021268715' #MTC 550
+
 
 ### builds
 alias buildportalservicos='~/scripts/mvn_build_portalservicos.sh'
@@ -116,4 +122,5 @@ alias codeupdate='wget --no-check-certificate https://vscode-update.azurewebsite
 alias androidstudio='~/development/android-studio/bin/studio.sh&'
 alias pp='~/scripts/deezerPlayPause.sh'
 alias newdesktopshortcut='sudo ~/scripts/newDesktopShortcut.sh'
+alias svnforceclean="svn st | grep '^?' | awk '{print $2}' | xargs rm -rf"
 

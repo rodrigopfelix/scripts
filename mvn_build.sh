@@ -12,4 +12,4 @@ POM=$1
 #fi
 
 ### Executing the build
-mvn -T 4 -U clean install -f "$POM"
+mvn -T 4 -U clean package -Dproject.build.sourceEncoding=ISO-8859-1 -DBUILD_NUMBER=DEV.MANUAL -f "$POM"
