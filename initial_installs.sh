@@ -31,11 +31,11 @@ sudo apt -y install ncat
 sudo apt -y install xdotool
 sudo apt -y install terminator
 sudo apt -y install wine-stable
-
+sudo apt -y install libcanberra-gtk-module
 ### git
 sudo apt -y install git
 sudo apt -y install git-gui
-sudo apt install -y aspell-pt-br 
+sudo apt -y install aspell-pt-br 
 git config --global user.email "rodrigo.felix.ext@sascar.com.br"
 rodfelix@rodfelix-Note:~/src/KMS$ git config --global user.name "Rodrigo Félix"
 
@@ -92,6 +92,9 @@ sudo apt -y install virtualbox
 newdesktopshortcut sasgc $HOME/src/sasgccliente/homologacao/src/resources/imagens/sasgc.ico $HOME/src/sasgccliente/build-sasgc-Desktop_Qt_5_7_0_GCC_64bit-Debug/debug/bin/sasgc SasGC
 
 newdesktopshortcut ireport $HOME/Downloads/iReport-4.0.2/bin/document.ico "sh $HOME/Downloads/iReport-4.0.2/bin/ireport --jdkhome $HOME/Downloads/jdk1.7.0_80/" iReport
+
+newdesktopshortcut qtlinguist QtProject-qtcreator /opt/Qt5.7.0/5.7/gcc_64/bin/linguist "Linguist (Qt)"
+
 #printf "[Desktop Entry]\nVersion=1.0\nType=Application\nTerminal=false
 #Icon=$HOME/Downloads/iReport-4.0.2/bin/document.ico
 #Exec=sh $HOME/Downloads/iReport-4.0.2/bin/ireport --jdkhome $HOME/Downloads/jdk1.7.0_80/\nName=iReport" > /tmp/ireport_TST.desktop # shortcut to ireport
