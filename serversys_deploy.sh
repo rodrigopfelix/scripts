@@ -104,7 +104,7 @@ if [ -z $1 ]; then THROW 'Informe os sistemas a serem compilados (OPÇÕES: incl
 
 REPOSITORIO=`svn info | grep "^$SVN_TAG_RAIZ:" | egrep -o '[^/]+$'`
 if [ -z $REPOSITORIO ]; then THROW 'Não foi possível ler o repositório. Você está em um diretório svn?'; fi
-if [ "$REPOSITORIO" != "serversys" ] && [ "$REPOSITORIO" != "parser2" ]; then THROW 'Este não é um repositório serversys'; fi
+if [ "$REPOSITORIO" != "serversys" ] && [ "$REPOSITORIO" != "parser2" ]; then THROW 'Este não é um repositório serversys ou parser2'; fi
 PRINT_INFO "Repositório svn: " $REPOSITORIO
 
 
@@ -120,7 +120,12 @@ fi
 PWD=`pwd`
 PRINT_INFO "Local dir: " $PWD
 
-PRINT_INFO "Destino: " "$IP_SRV_SASGC:/$PATH_DESTINO" #TODO: tem 2 repositorios agora
+#TODO: tornar dinâmico
+if [ "$REPOSITORIO" != "parser2" ]; then
+    PRINT_INFO "Destino: " "$IP_SRV_SASGC:$PATH_DESTINO"
+else
+    PRINT_INFO "Destino: " "$IP_SRV_PARSER:$PATH_DESTINO"
+fi
 
 for var in "$@"
 do

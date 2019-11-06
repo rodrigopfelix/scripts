@@ -45,17 +45,28 @@ rodfelix@rodfelix-Note:~/src/KMS$ git config --global user.name "Rodrigo Félix"
 sudo wget --no-check-certificate https://vscode-update.azurewebsites.net/latest/linux-deb-x64/stable -O /tmp/code_latest_amd64.deb && sudo dpkg -i /tmp/code_latest_amd64.deb
 
 #configs do vscode
-printf '{\n\t"http.proxyStrictSSL": false,\n\t"editor.rulers": [80,120]\n}' > ~/.config/Code/User/settings.json
+printf '{\n\t"http.proxyStrictSSL": false,\n\t"editor.rulers": [80,120],\n\t"dart.previewFlutterUiGuides": true\n}' > ~/.config/Code/User/settings.json
 printf '// Place your key bindings in this file to override the defaults\n[\n    {\n        "key": "alt+left",\n        "command": "workbench.action.navigateBack"\n    },\n    {\n        "key": "alt+right",\n        "command": "workbench.action.navigateForward"\n    },\n    {\n        "key": "ctrl+shift+-",\n        "command": "-workbench.action.navigateForward"\n    },\n    {\n        "key": "ctrl+shift+down",\n        "command": "editor.action.copyLinesDownAction",\n        "when": "editorTextFocus && !editorReadonly"\n    },\n    {\n        "key": "ctrl+shift+alt+down",\n        "command": "-editor.action.copyLinesDownAction",\n        "when": "editorTextFocus && !editorReadonly"\n    },\n    {\n        "key": "ctrl+shift+up",\n        "command": "editor.action.copyLinesUpAction",\n        "when": "editorTextFocus && !editorReadonly"\n    },\n    {\n        "key": "ctrl+shift+alt+up",\n        "command": "-editor.action.copyLinesUpAction",\n        "when": "editorTextFocus && !editorReadonly"\n    }\n]\n' > ~/.config/Code/User/keybindings.json
 
 #Extensões
 code --install-extension vscjava.vscode-java-pack
 code --install-extension alefragnani.Bookmarks
-code --install-extension wayou.vscode-todo-highlight
 code --install-extension ms-vscode.cpptools
 code --install-extension bmewburn.vscode-intelephense-client
 code --install-extension dart-code.flutter
+code --install-extension coenraads.bracket-pair-colorizer-2
+code --install-extension jeroen-meijer.pubspec-assist
+code --install-extension pkief.material-icon-theme
+code --install-extension aaron-bond.better-comments
+code --install-extension gruntfuggly.todo-tree
+#code --install-extension wayou.vscode-todo-highlight
+code --install-extension naumovs.color-highlight
+code --install-extension kisstkondoros.vscode-gutter-preview
 #flutter config --android-sdk ~/development/Android/Sdk/
+#spring boot
+code --install-extension vscjava.vscode-spring-initializr
+code --install-extension vscjava.vscode-spring-boot-dashboard
+code --install-extension Pivotal.vscode-spring-boot
 
 ###################################################################################
 ### Deezer - https://nuvola.tiliado.eu/nuvola/ubuntu/bionic/

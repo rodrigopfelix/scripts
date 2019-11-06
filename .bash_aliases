@@ -62,6 +62,7 @@ alias cdwsportalsrc='cd ~/src/ws-portal'
 alias cdweblogicdomains='cd ~/wls12213/user_projects/domains/'
 alias cddownloads='cd ~/Downloads/'
 alias cdtestes='cd ~/src/testes/'
+alias cdscripts='cd ~/scripts/'
 
 ### sshs
 alias sshmanagersu='ssh -t rodrigo.felix.ext@10.1.110.20 "cd /home/rodrigo.felix.ext/src/serversys/homologacao/pacotes/managers ; sudo su"'
