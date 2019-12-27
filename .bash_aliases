@@ -1,5 +1,9 @@
+### Exports
 export PATH="$PATH:$HOME/development/flutter/bin"
 export PATH="$PATH:$HOME/scripts"
+export PATH="$PATH:/usr/lib/dart/bin"
+export PATH="$PATH:$HOME/.pub-cache/bin"
+
 
 ### Carregando configuracoes de proxy
 #. ~/proxy
@@ -74,6 +78,7 @@ alias sshemersonsu='ssh -t rodrigo.felix.ext@10.1.110.20 "cd /home/emerson.silva
 
 alias sshstikadinho='ssh -t rodrigo.felix.ext@10.1.110.20'
 alias sshstikadinhosu='ssh -t rodrigo.felix.ext@10.1.110.20 "sudo su"'
+alias sshstikadinhoalias='ssh -t rodrigo.felix.ext@10.1.110.20 "sudo su && . alias"'
 alias sshparser='ssh -t rodrigo.felix.ext@10.1.110.1'
 alias sshparsersu='ssh -t rodrigo.felix.ext@10.1.110.1 "sudo su"'
 alias sshbd='ssh -t rodrigo.felix.ext@10.1.110.2'

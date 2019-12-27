@@ -32,20 +32,31 @@ sudo apt -y install xdotool
 sudo apt -y install terminator
 sudo apt -y install wine-stable
 sudo apt -y install libcanberra-gtk-module
+sudo apt -y install gparted
+
 ### git
 sudo apt -y install git
 sudo apt -y install git-gui
 sudo apt -y install aspell-pt-br 
-git config --global user.email "rodrigo.felix.ext@sascar.com.br"
-rodfelix@rodfelix-Note:~/src/KMS$ git config --global user.name "Rodrigo Félix"
+git config --global user.email "rodrigopfelix@hotmail.com"
+git config --global user.name "Rodrigo Félix"
 
+### Dart
+sudo apt update
+sudo apt -y install apt-transport-https
+sudo sh -c 'wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
+sudo sh -c 'wget -qO- https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list'
+sudo apt update
+sudo apt -y install dart
+pub global activate slidy #slidy
 
 ###################################################################################
 ### VSCode
 sudo wget --no-check-certificate https://vscode-update.azurewebsites.net/latest/linux-deb-x64/stable -O /tmp/code_latest_amd64.deb && sudo dpkg -i /tmp/code_latest_amd64.deb
 
 #configs do vscode
-printf '{\n\t"http.proxyStrictSSL": false,\n\t"editor.rulers": [80,120],\n\t"dart.previewFlutterUiGuides": true\n}' > ~/.config/Code/User/settings.json
+printf '{\n\t"editor.rulers": [80,120],\n\t"files.exclude": {\n\t\t"**/.classpath": true,\n\t\t"**/.project": true,\n\t\t"**/.settings": true,\n\t\t"**/.factorypath": true,\n\t\t"**/*.g.dart": true\n\t},\n\t"dart.previewFlutterUiGuides": true\n}' > ~/.config/Code/User/settings.json
+#printf '{\n\t"editor.rulers": [80,120],\n\t"editor.suggestSelection": "first",\n\t"vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",\n\t"C_Cpp.updateChannel": "Insiders",\n\t"files.exclude": {\n\t\t"**/.classpath": true,\n\t\t"**/.project": true,\n\t\t"**/.settings": true,\n\t\t"**/.factorypath": true,\n\t\t"**/*.g.dart": true\n\t},\n\t"window.zoomLevel": 0,\n\t"terminal.integrated.rendererType": "dom",\n\t"dart.previewFlutterUiGuides": true,\n\t"workbench.iconTheme": "material-icon-theme"\n}' > ~/.config/Code/User/settings.json
 printf '// Place your key bindings in this file to override the defaults\n[\n    {\n        "key": "alt+left",\n        "command": "workbench.action.navigateBack"\n    },\n    {\n        "key": "alt+right",\n        "command": "workbench.action.navigateForward"\n    },\n    {\n        "key": "ctrl+shift+-",\n        "command": "-workbench.action.navigateForward"\n    },\n    {\n        "key": "ctrl+shift+down",\n        "command": "editor.action.copyLinesDownAction",\n        "when": "editorTextFocus && !editorReadonly"\n    },\n    {\n        "key": "ctrl+shift+alt+down",\n        "command": "-editor.action.copyLinesDownAction",\n        "when": "editorTextFocus && !editorReadonly"\n    },\n    {\n        "key": "ctrl+shift+up",\n        "command": "editor.action.copyLinesUpAction",\n        "when": "editorTextFocus && !editorReadonly"\n    },\n    {\n        "key": "ctrl+shift+alt+up",\n        "command": "-editor.action.copyLinesUpAction",\n        "when": "editorTextFocus && !editorReadonly"\n    }\n]\n' > ~/.config/Code/User/keybindings.json
 
 #Extensões
@@ -84,6 +95,8 @@ flatpak install nuvola eu.tiliado.Nuvola
 sudo apt -y install subversion
 sudo apt -y install rabbitvcs-cli
 sudo apt -y install maven
+git config --global user.email "rodrigo.felix.ext@sascar.com.br"
+git config --global user.name "Rodrigo Félix"
 
 ### QT 5.7
 sudo apt -y install build-essential 
