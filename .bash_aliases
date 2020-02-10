@@ -53,7 +53,9 @@ alias cdparser='cd ~/src/parser2/'
 alias cdparserdev='cdparser && cd desenvolvimento/'
 alias cdparserhom='cdparser && cd homologacao/'
 alias cdparserprod='cdparser && cd producao/'
-alias cdintranet='cd ~/src/intranet/trunk/'
+alias cdintranet='cdintranettrunk'
+alias cdintranettrunk='cd ~/src/intranet/trunk/'
+alias cdintranetbranches='cd ~/src/intranet/branches/'
 alias cdjava='cd ~/src/aplicacoes_legado_java/'
 alias cdjavadev='cdjava && cd desenvolvimento/'
 alias cdjavahom='cdjava && cd homologacao/'
@@ -67,6 +69,10 @@ alias cdweblogicdomains='cd ~/wls12213/user_projects/domains/'
 alias cddownloads='cd ~/Downloads/'
 alias cdtestes='cd ~/src/testes/'
 alias cdscripts='cd ~/scripts/'
+alias cdbdscripts='cd ~/scripts/db/'
+alias cdsasintegra='cdsasintegrahom'
+alias cdsasintegradev='cd ~/src/SasIntegraV3/desenvolvimento'
+alias cdsasintegrahom='cd ~/src/SasIntegraV3/homologacao'
 
 ### sshs
 alias sshmanagersu='ssh -t rodrigo.felix.ext@10.1.110.20 "cd /home/rodrigo.felix.ext/src/serversys/homologacao/pacotes/managers ; sudo su"'
@@ -129,4 +135,14 @@ alias androidstudio='~/development/android-studio/bin/studio.sh&'
 alias pp='~/scripts/deezerPlayPause.sh'
 alias newdesktopshortcut='sudo ~/scripts/newDesktopShortcut.sh'
 alias svnforceclean="svn st | grep '^?' | awk '{print $2}' | xargs rm -rf"
+alias psqlintranetvim="PSQL_CMD_VIM 10.1.110.14 postgres sascar_desenvolvimento"
+alias psqlgerenciadoravim="PSQL_CMD_VIM 10.1.110.2 postgres gerenciadora"
+
+# $1 -> ip
+# $2 -> user
+# $3 -> database
+# $4 -> cmd
+PSQL_CMD_VIM() { psql -h "$1" -U "$2" -d "$3" -c "$4" | vim - -c ":set nowrap"; }
+PSQL_CMD_CODE() { psql -h "$1" -U "$2" -d "$3" -c "$4" > /tmp/table.log && code /tmp/table.log; }
+
 

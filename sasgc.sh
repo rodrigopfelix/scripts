@@ -73,6 +73,16 @@ relatorioPosicaoDetalhada()
     esac
 }
 
+# relatorioAssociacaoVeiculos()
+# {
+#     key Alt 1
+#     xdotool type l
+#     key Return 1
+#     sleep 0.75
+#     key Tab 4
+#     xdotool type 10
+# }
+
 throw() { zenity --error --title "$TITLE" --text "$1"; exit; }
 pedir() { echo `zenity --entry --title "$TITLE" --text "$1" $2`; }
 
@@ -87,6 +97,7 @@ HELP="Digite a opção desejada:
 	[0]		Filtrar pelo 0029ENG
 	[D]		Relatório de posição detalhada
 	[A]		Relatório de dados adicionais
+	[V]		Relatório de associação de veículos (desativado)
 	[ESC]	Sair"
 
 
@@ -104,6 +115,7 @@ case $CHOOSE in
     'B'|'b') findSasgc; find `pedir 'Informe o filtro de busca: '`;;
     '3'|'3') findSasgc; find "3883SBS" ;;
     '0'|'0') findSasgc; find "0029ENG" ;;
+    # 'V'|'v') findSasgc; relatorioAssociacaoVeiculos ;;
     'D'|'d')
         fmt=`pedir 'Informe o formato desejado' 'csv html kml pdf'`;
         findSasgc; relatorioPosicaoDetalhada "$fmt";

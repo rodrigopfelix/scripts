@@ -55,9 +55,56 @@ pub global activate slidy #slidy
 sudo wget --no-check-certificate https://vscode-update.azurewebsites.net/latest/linux-deb-x64/stable -O /tmp/code_latest_amd64.deb && sudo dpkg -i /tmp/code_latest_amd64.deb
 
 #configs do vscode
-printf '{\n\t"editor.rulers": [80,120],\n\t"files.exclude": {\n\t\t"**/.classpath": true,\n\t\t"**/.project": true,\n\t\t"**/.settings": true,\n\t\t"**/.factorypath": true,\n\t\t"**/*.g.dart": true\n\t},\n\t"dart.previewFlutterUiGuides": true\n}' > ~/.config/Code/User/settings.json
-#printf '{\n\t"editor.rulers": [80,120],\n\t"editor.suggestSelection": "first",\n\t"vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",\n\t"C_Cpp.updateChannel": "Insiders",\n\t"files.exclude": {\n\t\t"**/.classpath": true,\n\t\t"**/.project": true,\n\t\t"**/.settings": true,\n\t\t"**/.factorypath": true,\n\t\t"**/*.g.dart": true\n\t},\n\t"window.zoomLevel": 0,\n\t"terminal.integrated.rendererType": "dom",\n\t"dart.previewFlutterUiGuides": true,\n\t"workbench.iconTheme": "material-icon-theme"\n}' > ~/.config/Code/User/settings.json
-printf '// Place your key bindings in this file to override the defaults\n[\n    {\n        "key": "alt+left",\n        "command": "workbench.action.navigateBack"\n    },\n    {\n        "key": "alt+right",\n        "command": "workbench.action.navigateForward"\n    },\n    {\n        "key": "ctrl+shift+-",\n        "command": "-workbench.action.navigateForward"\n    },\n    {\n        "key": "ctrl+shift+down",\n        "command": "editor.action.copyLinesDownAction",\n        "when": "editorTextFocus && !editorReadonly"\n    },\n    {\n        "key": "ctrl+shift+alt+down",\n        "command": "-editor.action.copyLinesDownAction",\n        "when": "editorTextFocus && !editorReadonly"\n    },\n    {\n        "key": "ctrl+shift+up",\n        "command": "editor.action.copyLinesUpAction",\n        "when": "editorTextFocus && !editorReadonly"\n    },\n    {\n        "key": "ctrl+shift+alt+up",\n        "command": "-editor.action.copyLinesUpAction",\n        "when": "editorTextFocus && !editorReadonly"\n    }\n]\n' > ~/.config/Code/User/keybindings.json
+printf '{
+    "editor.rulers": [80,120],
+    "editor.suggestSelection": "first",
+    "files.exclude": {
+            "**/.classpath": true,
+            "**/.project": true,
+            "**/.settings": true,
+            "**/.factorypath": true,
+            "**/*.g.dart": true
+    },
+    "dart.previewFlutterUiGuides": true,
+    "todo-tree.general.statusBar": "tags",
+    "todo-tree.tree.showTagsFromOpenFilesOnly": true
+}' > ~/.config/Code/User/settings.json
+
+printf '// Place your key bindings in this file to override the defaults
+[
+    {
+        "key": "alt+left",
+        "command": "workbench.action.navigateBack"
+    },
+    {
+        "key": "alt+right",
+        "command": "workbench.action.navigateForward"
+    },
+    {
+        "key": "ctrl+shift+-",
+        "command": "-workbench.action.navigateForward"
+    },
+    {
+        "key": "ctrl+shift+down",
+        "command": "editor.action.copyLinesDownAction",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+    {
+        "key": "ctrl+shift+alt+down",
+        "command": "-editor.action.copyLinesDownAction",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+    {
+        "key": "ctrl+shift+up",
+        "command": "editor.action.copyLinesUpAction",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+    {
+        "key": "ctrl+shift+alt+up",
+        "command": "-editor.action.copyLinesUpAction",
+        "when": "editorTextFocus && !editorReadonly"
+    }
+]' > ~/.config/Code/User/keybindings.json
 
 #Extensões
 code --install-extension vscjava.vscode-java-pack

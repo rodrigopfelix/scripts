@@ -45,10 +45,54 @@ PRINT_INFO ()
 
 PRINT_SUCCESS () { printf "${GREEN}SUCESSO:${NC} $1\n"; }
 PRINT_ERRO ()    { printf "${RED}ERRO:${NC} $1 $2\n"; }
-THROW() { PRINT_ERRO "$1"; exit 1; }
+THROW() { PRINT_ERRO "$1"; exit 2; }
 
+# $1 -> Mensagem da pergunta
+# $2 -> Resposta padrao (default "yes")
+# RETURN -> altera o valor da variável choose para "yes" ou "no" de acordo com a resposta do usuário
+ASK_FOR()
+{
+	if [ "$2" == "no" ]; then
+		PRINT_INFO "DUVIDA: " "$1 (s/N)"
+		read choose
+		if [ "$choose" = "s" -o "$choose" = "S" ]; then choose="yes"; else choose="no"; fi;
+	else
+		PRINT_INFO "DUVIDA: " "$1 (S/n)"
+		read choose
+		if [ "$choose" = "n" -o "$choose" = "N" ]; then choose="no"; else choose="yes"; fi;
+	fi
+}
+
+ASK_AND_DIE_IF_NO()  { ASK_FOR "$1" "$2"; if [ "$choose" = "no"  ]; then exit 1; fi }
+ASK_AND_DIE_IF_YES() { ASK_FOR "$1" "$2"; if [ "$choose" = "yes" ]; then exit 1; fi }
+
+# $1 -> Origem
+# $2 -> Destino
+SCP()
+{
+	PRINT_INFO " > Copiando arquivos de $1"
+	PRINT_INFO "                   para $2..."
+    scp $1 $2
+    if [ $? != 0 ]; then THROW "Não foi possível copiar os arquivos"; fi
+}
+
+# $1 -> IP do servidor onde será executado o omake
+# $2 -> Caminho onde será o executado o omake
+# $3 -> Target (nome final do executável que será compilado)
+SOMAKE()
+{
+    PRINT_INFO " > Compilando $3..."
+    ssh -t $1 "cd $2 && omake -j4 $3 $CMD_HIGHLIGHT_ERROR"
+    if [ $? != 0 ]; then THROW "Não foi possível compilar $2 $3"; fi
+}
+
+# $1 -> Caminho relativo dentro do repositório
+# $2 -> Filtro de cópia do repositório para o servidor
+# $3 -> Nome do executável a ser compilado
+# $4 -> Caminho de compilação dentro do repositório (opcional)
 DEPLOY()
 {
+	#TODO: Utilizar as funcoes SCP e SOMAKE
     PRINT_INFO " > Copiando arquivos de ./$1..."
     scp $PWD/$1/$2* "$IP_SRV_SASGC:$PATH_DESTINO/$REPOSITORIO/$RELATIVE_URL/$1/"
     if [ $? != 0 ]; then THROW "Não foi possível copiar os arquivos"; fi
@@ -62,6 +106,7 @@ DEPLOY()
 # $3 -> Caminho relativo dentro de $REPORT_DATA_PATH
 DEPLOY_REPORT_FILES()
 {
+	#TODO: Utilizar as funcoes SCP e SOMAKE
     PRINT_INFO " > Copiando arquivos de ./$1..."
     scp $PWD/$1/$2* "$IP_SRV_SASGC:$PATH_TMP"
     if [ $? != 0 ]; then THROW "Não foi possível copiar os arquivos de './$1' para o servidor"; fi
@@ -69,6 +114,22 @@ DEPLOY_REPORT_FILES()
 	PRINT_INFO "                  para $IP_SRV_SASGC:$REPORT_DATA_PATH"
     ssh -t $IP_SRV_SASGC "sudo mv $PATH_TMP/$2* $REPORT_DATA_PATH/$3"
     if [ $? != 0 ]; then THROW "Não foi possível mover os arquivos de '$PATH_TMP' para '$REPORT_DATA_PATH'"; fi
+}
+
+# $1 -> targets (gerenciador, gerenciadord ou gerenciador_relatoriod)
+DEPLOY_GERENCIADORD()
+{
+    path_gerenciadord="sasgc_embarcado/src/server"
+	SCP "$PWD/$path_gerenciadord/funcao*" "$IP_SRV_SASGC:$PATH_DESTINO/$REPOSITORIO/$RELATIVE_URL/$path_gerenciadord/"
+	SCP "$PWD/$path_gerenciadord/gerenciador.c" "$IP_SRV_SASGC:$PATH_DESTINO/$REPOSITORIO/$RELATIVE_URL/$path_gerenciadord/"
+
+	if [ "$1" == "gerenciadord" ] || [ "$1" == "gerenciador" ]; then
+		SOMAKE $IP_SRV_SASGC "$PATH_DESTINO/$REPOSITORIO/$RELATIVE_URL/$path_gerenciadord/sasgc/" "gerenciadord";
+	fi
+
+	if [ "$1" == "gerenciador_relatoriod" ] || [ "$1" == "gerenciador" ]; then
+		SOMAKE $IP_SRV_SASGC "$PATH_DESTINO/$REPOSITORIO/$RELATIVE_URL/$path_gerenciadord/relatorio/" "gerenciador_relatoriod";
+	fi
 }
 
 BUILD_JAVA()
@@ -83,6 +144,7 @@ BUILD_JAVA()
 # $2 -> Filtro de cópia do repositório para o servidor
 DEPLOY_PARSER_COPY()
 {
+	#TODO: Utilizar as funcoes SCP e SOMAKE
 	scp $PWD/$1/$2 "$IP_SRV_PARSER:$PATH_DESTINO/$REPOSITORIO/$RELATIVE_URL/$1/"
     if [ $? != 0 ]; then THROW "Não foi possível copiar os arquivos"; fi
 }
@@ -90,6 +152,7 @@ DEPLOY_PARSER_COPY()
 # $1 -> Nome do parser
 DEPLOY_PARSER()
 {
+	#TODO: Utilizar as funcoes SCP e SOMAKE
     PRINT_INFO " > Copiando arquivos do parser $1..."
     
 	DEPLOY_PARSER_COPY "protocolos/lib" "protocolo.*"
@@ -102,6 +165,7 @@ DEPLOY_PARSER()
 
 DEPLOY_CACHE_CADASTRAL()
 {
+	#TODO: Utilizar as funcoes SCP e SOMAKE
     PRINT_INFO " > Copiando arquivos do cache cadastral..."
     
 	DEPLOY_PARSER_COPY "memoria/cache_cadastral" "*"
@@ -117,28 +181,27 @@ START_SERVERSYS_REPO()
 	# Verificando se a branch já existe no servidor
 	if ssh -t $IP_SRV_SASGC "[ -d '$FULL_PATH' ] && [ ! -z \"\$(ls -A '$FULL_PATH')\" ]"
 	then
-		echo "Diretório '$FULL_PATH' já existe e contém arquivos. Deseja atualizar a branch? (S/n)?"
-		read choose
-		if [ "$choose" == "n" -o "$choose" == "N" ]; then exit; fi
+		ASK_AND_DIE_IF_NO "Diretório '$FULL_PATH' já existe e contém arquivos. Deseja atualizar a branch?" "yes"
 		PRINT_INFO " > Atualizando branch..."
 		ssh -t $IP_SRV_SASGC "cd $FULL_PATH && svn up"
 		if [ $? != 0 ]; then THROW "Não foi possível atualizar branch"; fi
 	else
 		SVN_URL=`svn info | grep "^URL:" | egrep -o '[^ ]+$'`
 		PRINT_INFO "Url SVN: " $SVN_URL
-		echo "Criar diretório '$FULL_PATH' e baixar branch? (S/n)?"
-		read choose
-		if [ "$choose" == "n" -o "$choose" == "N" ]; then exit; fi
+		ASK_AND_DIE_IF_NO "Criar diretório '$FULL_PATH' e baixar branch?" "yes"
 		PRINT_INFO " > Criando diretório e baixando branch..."
 		ssh -t $IP_SRV_SASGC "mkdir -p $FULL_PATH && cd $FULL_PATH && cd .. && svn co $SVN_URL"
 		if [ $? != 0 ]; then THROW "Não foi possível criar diretório e baixar branch"; fi
 	fi
 }
 
-# $1 -> Path da branch
 INIT_SERVERSYS_REPO()
 {
-	# TODO: refatorar, criando uma funçao de compile omake
+	# TODO: refatorar, criando uma funçao de compile omake - TESTAR implementação abaixo para esse TODO
+	# SOMAKE $IP_SRV_SASGC "$FULL_PATH/lib"
+	# SOMAKE $IP_SRV_SASGC "$FULL_PATH/sasgc_embarcado/lib"
+	# SOMAKE $IP_SRV_SASGC "$FULL_PATH/sasgc_embarcado/src/server/"
+	# FIM TESTE DO TODO
 	PRINT_INFO "\n > Compilando serversys/include..."
 	ssh -t $IP_SRV_SASGC "cd $FULL_PATH/include && omake -j4 $CMD_HIGHLIGHT_ERROR"
 	
@@ -163,14 +226,15 @@ INIT_SERVERSYS_REPO()
 # $3 -> Symbolic link path
 CREATE_SYM_LINK()
 {
-	echo "Criar link simbólico '$3'? (S/n)?"
-	read choose
-	if [ "$choose" != "n" -a "$choose" != "N" ]; then 
+	ASK_FOR "Criar link simbólico '$3'?" "yes"
+
+	if [ "$choose" == "yes" ]; then 
 		PRINT_INFO " > Criando link simbólico '$2'"
 		PRINT_INFO "                       em '$3'"
 		ssh -t $1 "sudo ln -sf $2 $3"
-		if [ $? != 0 ]; then THROW "Não foi possível compilar serversys/sasgc_embarcado/src/server/"; fi
+		if [ $? != 0 ]; then THROW "Não foi possível criar link simbólico"; fi
 	fi
+	
 }
 
 ##########################################################################
@@ -189,9 +253,7 @@ RELATIVE_URL=`svn info | grep "^$SVN_TAG_RELATIVE_URL:" | egrep -o '[^^]+$'`
 FULL_PATH="$PATH_DESTINO/$REPOSITORIO/$RELATIVE_URL/"
 PRINT_INFO "Diretório relativo: " $RELATIVE_URL
 if [ `awk -F"/" '{print NF-1}' <<< "$RELATIVE_URL"` != 2 ]; then
-    echo "Diretório relativo fora do padrão esperado (/ambiente/branch). Deseja continuar (s/N)?"
-    read choose
-    if [ "$choose" != "s" -a "$choose" != "S" ]; then exit; fi
+	ASK_AND_DIE_IF_NO "Diretório relativo fora do padrão esperado (/ambiente/branch). Deseja continuar?" "no"
 fi
 
 
@@ -254,10 +316,17 @@ do
 				    # if [ $? != 0 ]; then THROW "Não foi possível copiar do servidor para o diretório do sasgc"; fi
 				    ;;
 				
+				gerenciadord|gerd) 
+					DEPLOY_GERENCIADORD "gerenciadord" ;;
+				gerenciador_relatoriod|relatoriod|reld) 
+					DEPLOY_GERENCIADORD "gerenciador_relatoriod" ;;
+				gerenciador|ger) # Ambos (gerenciadord e gerenciador_relatoriod)
+					DEPLOY_GERENCIADORD "gerenciador" ;;
+
 				jasperadicionais|jadicionais)
 				    DEPLOY_REPORT_FILES "sasgc_embarcado/RelatoriosSasgc/template/" "dados_adicionais" "template";;
 				jasperregrasseguranca|jregseg)
-				    DEPLOY_REPORT_FILES "sasgc_embarcado/RelatoriosSasgc/template/" "sequenciamento_macros" "template";;
+				    DEPLOY_REPORT_FILES "sasgc_embarcado/RelatoriosSasgc/template/" "sequenciamento_macros" "template" ;;
 				jaspergrupopontos|jgpontos)
 				    DEPLOY_REPORT_FILES "sasgc_embarcado/RelatoriosSasgc/template/" "grupoPontos" "template";;
 				jasperclientes|jclientes)
