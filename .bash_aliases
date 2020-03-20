@@ -61,7 +61,7 @@ alias cdjavadev='cdjava && cd desenvolvimento/'
 alias cdjavahom='cdjava && cd homologacao/'
 alias cdportalservicos='cd ~/src/portalservicos/'
 alias cdportalservicoshom='cdportalservicos && cd homologacao/java/trunk/'
-alias cdportalservicosdev='cdportalservicos && cd desenvolvimento/PRDSEG-2961/java/trunk/' 
+alias cdportalservicosdev='cdportalservicos && cd desenvolvimento/'
 alias cdwsportal='cdwsportalsrc'
 #alias cdwsportalwww='cd /var/www/html/ws_portal/'
 alias cdwsportalsrc='cd ~/src/ws-portal'
@@ -135,6 +135,7 @@ alias androidstudio='~/development/android-studio/bin/studio.sh&'
 alias pp='~/scripts/deezerPlayPause.sh'
 alias newdesktopshortcut='sudo ~/scripts/newDesktopShortcut.sh'
 alias svnforceclean="svn st | grep '^?' | awk '{print $2}' | xargs rm -rf"
+alias svnrevertall="svn st | grep '^M' | awk '{print $2}' | xargs svn revert"
 alias psqlintranetvim="PSQL_CMD_VIM 10.1.110.14 postgres sascar_desenvolvimento"
 alias psqlgerenciadoravim="PSQL_CMD_VIM 10.1.110.2 postgres gerenciadora"
 

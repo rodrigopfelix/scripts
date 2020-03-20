@@ -34,6 +34,15 @@ sudo apt -y install wine-stable
 sudo apt -y install libcanberra-gtk-module
 sudo apt -y install gparted
 
+### Skype
+echo "deb [arch=amd64] https://repo.skype.com/deb stable main" | sudo tee /etc/apt/sources.list.d/skype-stable.list
+wget https://repo.skype.com/data/SKYPE-GPG-KEY
+sudo apt-key add SKYPE-GPG-KEY
+sudo apt install apt-transport-https
+rm -f SKYPE-GPG-KEY
+sudo apt update
+sudo apt -y install skypeforlinux
+
 ### git
 sudo apt -y install git
 sudo apt -y install git-gui

@@ -296,6 +296,10 @@ do
 					# ssh -t $IP_SRV_SASGC "sudo ls -alF $BIN_PATH"
 					;;
 
+				librevegeo|revgeo)
+				    DEPLOY "include" "libGeoWeb.h";
+				    DEPLOY "lib" "libGeoWeb.cpp";
+					;;
 				includes|include) #serversys includes && #sasgc includes
 				    DEPLOY "include"; DEPLOY "sasgc_embarcado/include";;
 				reportincludes|reporti|reportinclude) #serversys includes report && #sasgc includes report
@@ -331,6 +335,9 @@ do
 				    DEPLOY_REPORT_FILES "sasgc_embarcado/RelatoriosSasgc/template/" "grupoPontos" "template";;
 				jasperclientes|jclientes)
 				    DEPLOY_REPORT_FILES "sasgc_embarcado/RelatoriosSasgc/template/" "relatorio_clientes" "template";;
+				jasperposicaodetalhado|jposicaodetalhado|jposdet)
+				    DEPLOY_REPORT_FILES "sasgc_embarcado/RelatoriosSasgc/template/" "posicao_detalhado" "template";;
+
 				
 				relatoriojava|relatoriojar|relatorioj|java)
 				    BUILD_JAVA "sasgc_embarcado/RelatoriosSasgc"    
