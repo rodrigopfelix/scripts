@@ -121,7 +121,7 @@ size_t hexstr_to_byte(unsigned char* raw, const char* hexstr)
 {
     size_t len = strlen(hexstr);
     if (len % 2 != 0)
-        return;
+        return 0;
     size_t final_len = len / 2;
 
     for (size_t i=0, j=0; j<final_len; i+=2, j++)
