@@ -6,8 +6,12 @@
 #include <time.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-
-#define USAGE_MSG "Entrada de lat e long inválida. Exemplo de uso: mtc_sim.exe -28.451722 -58.246113"
+#include <string.h>
+#define USAGE_MSG "Entrada inválida. Exemplo de uso: mtc_sim hom -28.451722 -58.246113"
+#define IP_DESENV      "10.1.110.1" //"201.94.132.110"
+#define PORTA_DESENV   10063
+#define IP_HOMOL       "10.1.101.1" //"201.94.132.101"
+#define PORTA_HOMOL    11063
 
 // =============================================================================
 //    Protocolo MTC
@@ -37,8 +41,8 @@ static const unsigned int crc16_ccitt_table[256] = { 0x0000, 0x1021, 0x2042, 0x3
 
 unsigned short crc16_ccitt_buffer(unsigned char *data, unsigned int size)
 {
-	unsigned int i;
-	unsigned short crc1 = CRC_INITIAL_VALUE;
+        unsigned int i;
+        unsigned short crc1 = CRC_INITIAL_VALUE;
 
     for (i = 0; i < size; ++i)
         crc1 = (crc1 << 8) ^ crc16_ccitt_table[(unsigned char)(*data++ ^ (unsigned char)(crc1 >> 8))];
@@ -134,7 +138,8 @@ size_t hexstr_to_byte(unsigned char* raw, const char* hexstr)
 
 unsigned short calcular_crc(char* packet_in_ascii)
 {
-    char packet[256], hex_packet[256];
+    char packet[256];
+    unsigned char hex_packet[256];
     int size_hex_packet;
 
     strcpy(packet, packet_in_ascii);
@@ -193,14 +198,13 @@ void prepare_packet(char* out, char* pak)
     out[j++] = '4';
     out[j++] = '\0';
 }
-
-void send_packet(unsigned char* hex_packet, size_t size)
+void send_packet(unsigned char* hex_packet, size_t size, char* ip, int porta)
 {
     int sockfd, connfd;
     struct sockaddr_in servaddr, cli;
 
     // Pacote de apresentação do veículo HXA7003
-    unsigned char apresentation[39] = { 0x01, 0x80, 0x00, 0x84, 0x00, 0x28,
+    unsigned char apresentation[] = { 0x01, 0x80, 0x00, 0x84, 0x00, 0x28,
           0x4c, 0x72, 0x65, 0x00, 0x00, 0x00, 0x00, 0x00, 0x44, 0x03, 0x10,
           0x21, 0x00, 0x6e, 0xe1, 0x58, 0x39, 0x08, 0x26, 0x36, 0x00, 0xf3,
           0xe2, 0xbd, 0x03, 0x10, 0x21, 0x00, 0x00, 0x00, 0xed, 0xf3, 0x04,
@@ -216,9 +220,8 @@ void send_packet(unsigned char* hex_packet, size_t size)
     bzero(&servaddr, sizeof(servaddr));
 
     servaddr.sin_family = AF_INET;
-    servaddr.sin_addr.s_addr = inet_addr("201.94.132.110");
-    servaddr.sin_port = htons(10063);
-
+    servaddr.sin_addr.s_addr = inet_addr(ip);
+    servaddr.sin_port = htons(porta);
     // connect the client socket to server socket
     if (connect(sockfd, (struct sockaddr*) &servaddr, sizeof(servaddr)) != 0)
         die("connection with the server failed...");
@@ -253,14 +256,28 @@ void send_packet(unsigned char* hex_packet, size_t size)
 // =============================================================================
 int main (int argc, char *argv[])
 {
-    if (argc != 3)
+    if (argc != 4)
         die(USAGE_MSG);
 
-    double latitude = atof(argv[1]);
-    double longitude = atof(argv[2]);
+    double latitude = atof(argv[2]);
+    double longitude = atof(argv[3]);
+    char ip[15];
+    int porta;
+    
+    if (strcmp(argv[1], "hom")==0){
+        strcpy (ip, IP_HOMOL);
+        porta = PORTA_HOMOL;
+        puts ("Usando config de homologacao");
+    }
+    else {
+        strcpy (ip, IP_DESENV);
+        porta = PORTA_DESENV;
+        puts ("Usando config de desenvolvimento");
+    }
+    printf ("IP: %s, Porta: %d\n", ip, porta);
     
     time_t agora = time(NULL);
-    //agora += 3 * 3600; // Aumenta 3 horas por causa do GMT
+    agora += 1 * 3600; // Aumenta 1 horas por causa do GMT
     
     printf ("Enter latitude = %f\n", latitude);
     printf ("Enter longitude = %f\n", longitude);
@@ -271,7 +288,6 @@ int main (int argc, char *argv[])
     // printf ("Enter long: "); scanf("%lf", &longitude);
     // double latitude = -28.451722;
     // double longitude = -58.246113;
-
 
     int floor_lat = latitude;
     int floor_long = longitude;
@@ -309,7 +325,7 @@ int main (int argc, char *argv[])
 
     unsigned char hex_packet[256];
     size_t size = hexstr_to_byte(hex_packet, out);
-    // send_packet(hex_packet, size);
-
+    send_packet(hex_packet, size, ip, porta);
+    puts ("=== SUCESSO!");
     return 0;
 }
